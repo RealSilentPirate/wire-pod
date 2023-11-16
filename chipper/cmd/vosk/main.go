@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/kercre123/chipper/pkg/initwirepod"
-	stt "github.com/kercre123/chipper/pkg/wirepod/stt/vosk"
+	"github.com/RealSilentPirate/chipper/pkg/initwirepod"
+	stt "github.com/RealSilentPirate/chipper/pkg/wirepod/stt/vosk"
 )
 
 func main() {

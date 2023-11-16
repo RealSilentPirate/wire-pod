@@ -3,7 +3,7 @@
 set -e
 
 if [[ ! -d vic-toolchain ]]; then
-	git clone https://github.com/kercre123/vic-toolchain
+	git clone https://github.com/RealSilentPirate/vic-toolchain
 fi
 
 export CHAIN="$(pwd)/vic-toolchain/arm-linux-gnueabi/bin/arm-linux-gnueabi-"
