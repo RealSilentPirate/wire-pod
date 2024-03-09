@@ -60,7 +60,7 @@ function BeginBLESetup() {
     m3.innerHTML = "3. Click 'Begin Scanning' and pair with your Vector."
     button = document.createElement("button")
     button.innerHTML = "Begin Scanning"
-    button.onclick = function(){ScanRobots(false)}
+    button.onclick = function () { ScanRobots(false) }
     authEl.appendChild(m1)
     authEl.appendChild(m2)
     authEl.appendChild(m3)
@@ -74,7 +74,7 @@ var IsScanning = false
 function ScanRobots(returning) {
     disconnectButtonDiv = document.getElementById("disconnectButton")
     disconnectButton = document.createElement("button")
-    disconnectButton.onclick = function(){Disconnect()}
+    disconnectButton.onclick = function () { Disconnect() }
     disconnectButton.innerHTML = "Disconnect"
     disconnectButtonDiv.appendChild(disconnectButton)
     Scanning = true
@@ -97,7 +97,7 @@ function ScanRobots(returning) {
     xhr.open("POST", "/api-ble/scan");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send();
-    xhr.onload = function() {
+    xhr.onload = function () {
             response = xhr.response
             IsScanning = false
             if (!Scanning) {
@@ -112,12 +112,12 @@ function ScanRobots(returning) {
                 button = document.createElement("button")
                 id = parsed[i]["id"]
                 button.innerHTML = parsed[i]["name"]
-                button.onclick = function(){Scanning = false; ConnectRobot(id);}
+            button.onclick = function () { Scanning = false; ConnectRobot(id); }
                 buttonsDiv.appendChild(button)
             }
             authEl.appendChild(buttonsDiv)
         }
-    interval = setInterval(function(){
+    interval = setInterval(function () {
         if (!Scanning) {
             clearInterval(interval)
             return
@@ -130,7 +130,7 @@ function ScanRobots(returning) {
         xhr.open("POST", "/api-ble/scan");
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.send();
-        xhr.onload = function() {
+        xhr.onload = function () {
             response = xhr.response
             IsScanning = false
             if (!Scanning) {
@@ -145,8 +145,8 @@ function ScanRobots(returning) {
                 button = document.createElement("button")
                 id = parsed[i]["id"]
                 button.innerHTML = parsed[i]["name"]
-                button.onclick = (function(id) {
-                    return function() {
+                button.onclick = (function (id) {
+                    return function () {
                         Scanning = false;
                         ConnectRobotBuffer(id);
                     };
@@ -165,9 +165,9 @@ function ConnectRobotBuffer(id) {
     // if scanning, dont make connection request
     if (IsScanning) {
         console.log("Scan request being made, wait to connect robot...")
-        inte = setInterval(function(){
+        inte = setInterval(function () {
             if (!IsScanning) {
-                setTimeout(function(){
+                setTimeout(function () {
                     clearInterval(inte)
                     console.log("connecting robot...")
                     ConnectRobot(id)
@@ -185,7 +185,7 @@ function Disconnect() {
     authEl.appendChild(statusP)
     fetch("/api-ble/disconnect")
     .then((response) => {
-    setTimeout(function(){
+            setTimeout(function () {
         checkBLECapability();
     }, 2000)
 })
@@ -224,7 +224,7 @@ function CreatePinEntry() {
     pinEntry.setAttribute("maxlength", "6");
     pinEntry.setAttribute("oninput", "validateInput(this)");
     button = document.createElement("button")
-    button.onclick = function(){SendPin()}
+    button.onclick = function () { SendPin() }
     button.innerHTML = "Send PIN"
     authEl.appendChild(pinEntry)
     authEl.appendChild(document.createElement("br"))
@@ -270,13 +270,13 @@ function ScanWifi() {
     authEl.appendChild(statusP)
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/api-ble/scan_wifi", true);
-        xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
           if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             authEl.innerHTML = ""
             // create scan again button
             var scanAgain = document.createElement("button")
             scanAgain.innerHTML = "Scan Again"
-            scanAgain.onclick = function(){ScanWifi()}
+            scanAgain.onclick = function () { ScanWifi() }
             authEl.appendChild(scanAgain)
             authEl.appendChild(document.createElement("br"))
             // add network buttons
@@ -287,8 +287,8 @@ function ScanWifi() {
               var authtype = networks[i].authtype;
               var btn = document.createElement("button");
               btn.innerHTML = ssid;
-              btn.onclick = (function(ssid, authtype) {
-                return function() {
+                    btn.onclick = (function (ssid, authtype) {
+                        return function () {
                     CreateWiFiPassEntry(ssid, authtype);
                 };
               })(ssid, authtype);
@@ -306,7 +306,7 @@ function CreateWiFiPassEntry(ssid, authtype) {
     authEl.innerHTML = ""
     againButton = document.createElement("button")
     againButton.innerHTML = "Scan Again"
-    againButton.onclick = function(){ScanWifi()}
+    againButton.onclick = function () { ScanWifi() }
     authEl.appendChild
     statusDiv = document.createElement("div")
     statusP.innerHTML = "Enter the password for " + ssid
@@ -318,7 +318,7 @@ function CreateWiFiPassEntry(ssid, authtype) {
     pinEntry.name = "passEntry"
     pinEntry.placeholder = "Password"
     button = document.createElement("button")
-    button.onclick = function(){ConnectWifi(ssid, authtype)}
+    button.onclick = function () { ConnectWifi(ssid, authtype) }
     button.innerHTML = "Connect to Wi-Fi"
     authEl.appendChild(pinEntry)
     authEl.appendChild(document.createElement("br"))
@@ -342,7 +342,7 @@ function ConnectWifi(ssid, authtype) {
             authEl.innerHTML = ""
             button = document.createElement("button")
             button.innerHTML = "Click to authenticate"
-            button.onclick = function(){DoAuth()}
+                button.onclick = function () { DoAuth() }
             authEl.appendChild(button)
         }
     })
@@ -373,7 +373,7 @@ function DoAuth() {
         disconnectButtonDiv = document.getElementById("disconnectButton")
         disconnectButtonDiv.innerHTML = ""
         disconnectButton = document.createElement("button")
-        disconnectButton.onclick = function(){checkBLECapability()}
+            disconnectButton.onclick = function () { checkBLECapability() }
         disconnectButton.innerHTML = "Back to setup"
         disconnectButtonDiv.appendChild(disconnectButton)
     })

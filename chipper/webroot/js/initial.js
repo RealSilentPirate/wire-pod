@@ -2,7 +2,7 @@ function checkLanguage() {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "/api/get_stt_info");
     xhr.send();
-    xhr.onload = function() {
+    xhr.onload = function () {
         parsed = JSON.parse(xhr.response)
         if (parsed["sttProvider"] != "vosk" && parsed["sttProvider"] != "whisper.cpp") {
             console.log("stt not vosk/whisper")
@@ -40,7 +40,7 @@ function sendSetupInfo() {
               initWeatherAPIKey()
             } else if (response.includes("downloading")) {
               updateSetupStatus("Downloading language model...")
-              inte = setInterval(function(){
+                inte = setInterval(function () {
                 fetch("/api/get_download_status")
                   .then(response => response.text())
                   .then((response => {
@@ -152,7 +152,7 @@ function setConn() {
                 return
             } else {
                 updateSetupStatus("Setup is complete! Wire-pod has started. Redirecting to main page...")
-                setTimeout(function(){window.location.href = "/";}, 3000)
+                setTimeout(function () { window.location.href = "/"; }, 3000)
             }
         })
 }
