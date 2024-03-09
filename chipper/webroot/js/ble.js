@@ -9,7 +9,7 @@ externalSetup.innerHTML = vectorEpodSetup
 function showBotAuth() {
     GetLog = false
     document.getElementById("section-intents").style.display = "none";
-    document.getElementById("section-language").style.display = "none";
+    document.getElementById("section-STT-Settings").style.display = "none";
     document.getElementById("section-log").style.display = "none";
     document.getElementById("section-botauth").style.display = "block";
     updateColor("icon-BotAuth");
@@ -98,25 +98,25 @@ function ScanRobots(returning) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send();
     xhr.onload = function () {
-            response = xhr.response
-            IsScanning = false
-            if (!Scanning) {
-                clearInterval(interval)
-                return
-            }
-            console.log(response)
-            parsed = JSON.parse(response)
-            buttonsDiv.innerHTML = ""
-            authEl.innerHTML = ""
-            for (var i = 0; i < parsed.length; i++) {
-                button = document.createElement("button")
-                id = parsed[i]["id"]
-                button.innerHTML = parsed[i]["name"]
-            button.onclick = function () { Scanning = false; ConnectRobot(id); }
-                buttonsDiv.appendChild(button)
-            }
-            authEl.appendChild(buttonsDiv)
+        response = xhr.response
+        IsScanning = false
+        if (!Scanning) {
+            clearInterval(interval)
+            return
         }
+        console.log(response)
+        parsed = JSON.parse(response)
+        buttonsDiv.innerHTML = ""
+        authEl.innerHTML = ""
+        for (var i = 0; i < parsed.length; i++) {
+            button = document.createElement("button")
+            id = parsed[i]["id"]
+            button.innerHTML = parsed[i]["name"]
+            button.onclick = function () { Scanning = false; ConnectRobot(id); }
+            buttonsDiv.appendChild(button)
+        }
+        authEl.appendChild(buttonsDiv)
+    }
     interval = setInterval(function () {
         if (!Scanning) {
             clearInterval(interval)
@@ -150,7 +150,7 @@ function ScanRobots(returning) {
                         Scanning = false;
                         ConnectRobotBuffer(id);
                     };
-                  })(id);
+                })(id);
                 buttonsDiv.appendChild(button)
             }
             authEl.appendChild(buttonsDiv)
@@ -184,30 +184,30 @@ function Disconnect() {
     statusP.innerHTML = "Disconnecting..."
     authEl.appendChild(statusP)
     fetch("/api-ble/disconnect")
-    .then((response) => {
+        .then((response) => {
             setTimeout(function () {
-        checkBLECapability();
-    }, 2000)
-})
+                checkBLECapability();
+            }, 2000)
+        })
 }
 
 function ConnectRobot(id) {
     fetch("/api-ble/connect?id=" + id)
-    .then(response => response.text())
-    .then((response) => {
-        if (response.includes("success")) {
-            statusP.innerHTML = "Connected to robot! Loading pin screen..."
-            authEl.innerHTML = ""
-            authEl.appendChild(statusP)
-            CreatePinEntry()
-            return
-        }
-    })
+        .then(response => response.text())
+        .then((response) => {
+            if (response.includes("success")) {
+                statusP.innerHTML = "Connected to robot! Loading pin screen..."
+                authEl.innerHTML = ""
+                authEl.appendChild(statusP)
+                CreatePinEntry()
+                return
+            }
+        })
 }
 
 function validateInput(input) {
     return input.value.length <= 6 && /^\d+$/.test(input.value);
-  }
+}
 
 function CreatePinEntry() {
     authEl.innerHTML = ""
@@ -236,30 +236,30 @@ function SendPin() {
     pin = document.getElementById("pinEntry").value
     authEl.innerHTML = ""
     fetch("/api-ble/send_pin?pin=" + pin)
-    .then(response => response.text())
-    .then((response) => {
-        if (response.includes("incorrect pin")) {
-            ScanRobots(true)
-        } else {
-            // create auth button
-            WifiCheck()
-        }
-        return
-    })
+        .then(response => response.text())
+        .then((response) => {
+            if (response.includes("incorrect pin")) {
+                ScanRobots(true)
+            } else {
+                // create auth button
+                WifiCheck()
+            }
+            return
+        })
 }
 
 function WifiCheck() {
     fetch("/api-ble/get_wifi_status")
-    .then(response => response.text())
-    .then((response) => {
-        console.log(response)
-        if (response == "1") {
-            DoAuth()
-        } else {
-            ScanWifi()
-        }
-        return
-    })
+        .then(response => response.text())
+        .then((response) => {
+            console.log(response)
+            if (response == "1") {
+                DoAuth()
+            } else {
+                ScanWifi()
+            }
+            return
+        })
 }
 
 //var parsedScan
@@ -268,10 +268,10 @@ function ScanWifi() {
     authEl.innerHTML = ""
     statusP.innerHTML = "Scanning for Wi-Fi networks..."
     authEl.appendChild(statusP)
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api-ble/scan_wifi", true);
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api-ble/scan_wifi", true);
     xhr.onreadystatechange = function () {
-          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             authEl.innerHTML = ""
             // create scan again button
             var scanAgain = document.createElement("button")
@@ -282,23 +282,23 @@ function ScanWifi() {
             // add network buttons
             var networks = JSON.parse(this.responseText);
             for (var i = 0; i < networks.length; i++) {
-              var ssid = networks[i].ssid;
-              if (ssid != "") {
-              var authtype = networks[i].authtype;
-              var btn = document.createElement("button");
-              btn.innerHTML = ssid;
+                var ssid = networks[i].ssid;
+                if (ssid != "") {
+                    var authtype = networks[i].authtype;
+                    var btn = document.createElement("button");
+                    btn.innerHTML = ssid;
                     btn.onclick = (function (ssid, authtype) {
                         return function () {
-                    CreateWiFiPassEntry(ssid, authtype);
-                };
-              })(ssid, authtype);
-              authEl.appendChild(btn);
+                            CreateWiFiPassEntry(ssid, authtype);
+                        };
+                    })(ssid, authtype);
+                    authEl.appendChild(btn);
+                }
             }
-            }
-          }
-        };
-        xhr.send();
-      }
+        }
+    };
+    xhr.send();
+}
 
 function CreateWiFiPassEntry(ssid, authtype) {
     console.log(ssid)
@@ -333,28 +333,28 @@ function ConnectWifi(ssid, authtype) {
     passP.innerHTML = "Connecting Vector to Wi-Fi..."
     authEl.appendChild(passP)
     fetch("/api-ble/connect_wifi?ssid=" + ssid + "&password=" + password + "&authType=" + authtype)
-    .then(response => response.text())
-    .then((response) => {
-        if (!response.includes("255")) {
-            alert("Error connecting, likely incorrect password")
-            CreateWiFiPassEntry(ssid, authtype)
-        } else {
-            authEl.innerHTML = ""
-            button = document.createElement("button")
-            button.innerHTML = "Click to authenticate"
+        .then(response => response.text())
+        .then((response) => {
+            if (!response.includes("255")) {
+                alert("Error connecting, likely incorrect password")
+                CreateWiFiPassEntry(ssid, authtype)
+            } else {
+                authEl.innerHTML = ""
+                button = document.createElement("button")
+                button.innerHTML = "Click to authenticate"
                 button.onclick = function () { DoAuth() }
-            authEl.appendChild(button)
-        }
-    })
+                authEl.appendChild(button)
+            }
+        })
 }
 
 function CheckFirmware() {
     fetch("/api-ble/get_firmware")
-    .then(response => response.text())
-    .then((response) => {
-        let splitFirmware = response.split("-")
-        console.log(splitFirmware)
-    })
+        .then(response => response.text())
+        .then((response) => {
+            let splitFirmware = response.split("-")
+            console.log(splitFirmware)
+        })
 }
 
 function DoAuth() {
@@ -363,18 +363,18 @@ function DoAuth() {
     authP.innerHTML = "Authenticating your Vector..."
     authEl.appendChild(authP)
     fetch("/api-ble/do_auth")
-    .then(response => response.text())
-    .then((response) => {
-        console.log(response)
-        authEl.innerHTML = ""
-        authP.innerHTML = "Authentication complete!"
-        authEl.appendChild(authP)
-        fetch("/api-ble/disconnect")
-        disconnectButtonDiv = document.getElementById("disconnectButton")
-        disconnectButtonDiv.innerHTML = ""
-        disconnectButton = document.createElement("button")
+        .then(response => response.text())
+        .then((response) => {
+            console.log(response)
+            authEl.innerHTML = ""
+            authP.innerHTML = "Authentication complete!"
+            authEl.appendChild(authP)
+            fetch("/api-ble/disconnect")
+            disconnectButtonDiv = document.getElementById("disconnectButton")
+            disconnectButtonDiv.innerHTML = ""
+            disconnectButton = document.createElement("button")
             disconnectButton.onclick = function () { checkBLECapability() }
-        disconnectButton.innerHTML = "Back to setup"
-        disconnectButtonDiv.appendChild(disconnectButton)
-    })
+            disconnectButton.innerHTML = "Back to setup"
+            disconnectButtonDiv.appendChild(disconnectButton)
+        })
 }

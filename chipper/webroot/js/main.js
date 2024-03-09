@@ -414,7 +414,7 @@ GetLog = false
 
 function showLog() {
   document.getElementById("section-intents").style.display = "none";
-  document.getElementById("section-language").style.display = "none";
+  document.getElementById("section-STT-Settings").style.display = "none";
   document.getElementById("section-log").style.display = "block";
   document.getElementById("section-botauth").style.display = "none";
   updateColor("icon-Logs");
@@ -448,8 +448,8 @@ function showLanguage() {
   document.getElementById("section-stt").style.display = "none";
   document.getElementById("section-restart").style.display = "none";
   document.getElementById("section-kg").style.display = "none";
-  document.getElementById("section-language").style.display = "block";
-  updateColor("icon-Language");
+  document.getElementById("section-STT-Settings").style.display = "block";
+  updateColor("icon-STT-Settings");
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/api/get_stt_info");
   xhr.send();
@@ -471,7 +471,7 @@ function showLanguage() {
 function showIntents() {
   GetLog = false
   document.getElementById("section-log").style.display = "none";
-  document.getElementById("section-language").style.display = "none";
+  document.getElementById("section-STT-Settings").style.display = "none";
   document.getElementById("section-botauth").style.display = "none";
   document.getElementById("section-intents").style.display = "block";
   updateColor("icon-Intents");
@@ -481,7 +481,7 @@ function showWeather() {
   document.getElementById("section-weather").style.display = "block";
   document.getElementById("section-stt").style.display = "none";
   document.getElementById("section-restart").style.display = "none";
-  document.getElementById("section-language").style.display = "none";
+  document.getElementById("section-STT-Settings").style.display = "none";
   document.getElementById("section-kg").style.display = "none";
   updateColor("icon-Weather");
 }
@@ -490,7 +490,7 @@ function showKG() {
   document.getElementById("section-weather").style.display = "none";
   document.getElementById("section-stt").style.display = "none";
   document.getElementById("section-restart").style.display = "none";
-  document.getElementById("section-language").style.display = "none";
+  document.getElementById("section-STT-Settings").style.display = "none";
   document.getElementById("section-kg").style.display = "block";
   updateColor("icon-KG");
 }

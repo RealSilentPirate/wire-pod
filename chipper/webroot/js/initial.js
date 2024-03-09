@@ -6,12 +6,12 @@ function checkLanguage() {
         parsed = JSON.parse(xhr.response)
         if (parsed["sttProvider"] != "vosk" && parsed["sttProvider"] != "whisper.cpp") {
             console.log("stt not vosk/whisper")
-          document.getElementById("section-language").style.display = "none"
-          document.getElementById("languageSelection").value = "en-US"
+            document.getElementById("section-STT-Settings").style.display = "none"
+            document.getElementById("languageSelection").value = "en-US"
         } else {
-          document.getElementById("section-language").style.display = "block"
-          console.log(parsed["sttLanguage"])
-          document.getElementById("languageSelection").value = "en-US"
+            document.getElementById("section-STT-Settings").style.display = "block"
+            console.log(parsed["sttLanguage"])
+            document.getElementById("languageSelection").value = "en-US"
         }
     }
 }
@@ -36,33 +36,33 @@ function sendSetupInfo() {
         .then(response => response.text())
         .then((response) => {
             if (response.includes("success")) {
-              updateSetupStatus("Language set successfully.")
-              initWeatherAPIKey()
+                updateSetupStatus("Language set successfully.")
+                initWeatherAPIKey()
             } else if (response.includes("downloading")) {
-              updateSetupStatus("Downloading language model...")
+                updateSetupStatus("Downloading language model...")
                 inte = setInterval(function () {
-                fetch("/api/get_download_status")
-                  .then(response => response.text())
-                  .then((response => {
-                    statusText = response
-                    if (response.includes("success")) {
-                      updateSetupStatus("Language set successfully.")
-                      initWeatherAPIKey()
-                      clearInterval(inte)
-                    } else if (response.includes("error")) {
-                        document.getElementById("config-options").style.display = "block"
-                    } else if (response.includes("not downloading")) {
-                      statusText = "Initiating language model download..."
-                    }
-                    updateSetupStatus(statusText)
-                  }))
-              }, 500)
+                    fetch("/api/get_download_status")
+                        .then(response => response.text())
+                        .then((response => {
+                            statusText = response
+                            if (response.includes("success")) {
+                                updateSetupStatus("Language set successfully.")
+                                initWeatherAPIKey()
+                                clearInterval(inte)
+                            } else if (response.includes("error")) {
+                                document.getElementById("config-options").style.display = "block"
+                            } else if (response.includes("not downloading")) {
+                                statusText = "Initiating language model download..."
+                            }
+                            updateSetupStatus(statusText)
+                        }))
+                }, 500)
             } else if (response.includes("vosk")) {
                 initWeatherAPIKey()
             } else if (response.includes("error")) {
-              updateSetupStatus(response)
-              document.getElementById("config-options").style.display = "block"
-              return
+                updateSetupStatus(response)
+                document.getElementById("config-options").style.display = "block"
+                return
             }
 
         })
@@ -71,20 +71,20 @@ function sendSetupInfo() {
 function initWeatherAPIKey() {
     var provider = document.getElementById("weatherProvider").value;
     if (provider != "") {
-    updateSetupStatus("Setting weather API key...")
-    var form = document.getElementById("weatherAPIAddForm");
+        updateSetupStatus("Setting weather API key...")
+        var form = document.getElementById("weatherAPIAddForm");
 
-    var data = "provider=" + provider + "&api_key=" + form.elements["apiKey"].value;
-    fetch("/api/set_weather_api?" + data)
-        .then(response => response.text())
-        .then((response) => {
-            updateSetupStatus(response)
-            initKGAPIKey()
-        })
+        var data = "provider=" + provider + "&api_key=" + form.elements["apiKey"].value;
+        fetch("/api/set_weather_api?" + data)
+            .then(response => response.text())
+            .then((response) => {
+                updateSetupStatus(response)
+                initKGAPIKey()
+            })
     } else {
         initKGAPIKey()
     }
-} 
+}
 
 function initKGAPIKey() {
     updateSetupStatus("Setting knowledge graph settings...")
@@ -143,7 +143,7 @@ function setConn() {
     } else {
         url = "/api-chipper/use_ip?port=" + port
     }
-        fetch(url)
+    fetch(url)
         .then(response => response.text())
         .then((response) => {
             if (response == "") {
